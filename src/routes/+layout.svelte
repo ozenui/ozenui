@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import Navbar from '$lib/components/Navbar.svelte';
+	import Terminal from '$lib/components/widgets/Terminal.svelte';
 	import Wallpaper from '$lib/assets/image-background.svg';
 	import Avatar from '$lib/assets/image-avatar.webp';
 
@@ -12,7 +13,9 @@
 		<Navbar />
 
 		<div class="flex h-full w-full gap-2 overflow-hidden">
-			{@render children()}
+			<Terminal>
+				{@render children()}
+			</Terminal>
 		</div>
 	</content>
 

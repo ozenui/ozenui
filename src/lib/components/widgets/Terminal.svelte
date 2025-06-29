@@ -1,5 +1,6 @@
 <script lang="ts">
 	let textarea: HTMLTextAreaElement | undefined = $state(undefined);
+	let { children } = $props();
 
 	function autoGrow() {
 		if (!textarea) return;
@@ -18,8 +19,9 @@
 			bind:this={textarea}
 			rows="1"
 			class="w-full resize-none border-0 bg-transparent outline-none hover:ring-0 hover:outline-none focus:ring-0 focus:outline-none"
-			on:input={autoGrow}
-			autofocus
+			oninput={autoGrow}
 		></textarea>
 	</li>
+
+	{@render children()}
 </main>
