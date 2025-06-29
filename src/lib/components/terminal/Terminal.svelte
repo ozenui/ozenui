@@ -3,11 +3,6 @@
 	import { goto } from '$app/navigation';
 	import Avatar from '$lib/assets/image-avatar.webp';
 	import { runHelp, runRm } from './commands.js';
-	
-	function tryExecuteFile(filename: string, currentPath: string): string | null {
-		// No executable files supported, return null to indicate command not found
-		return null;
-	}
 	import { discoverContent } from './content-discovery.js';
 	import { onMount } from 'svelte';
 
@@ -15,7 +10,13 @@
 	let textarea: HTMLTextAreaElement | undefined = $state(undefined);
 	let userInput = $state('');
 	let history = $state<
-		Array<{ command: string; output?: string; timestamp: Date; pathname: string; isNeofetch?: boolean }>
+		Array<{
+			command: string;
+			output?: string;
+			timestamp: Date;
+			pathname: string;
+			isNeofetch?: boolean;
+		}>
 	>([]);
 
 	let dynamicContent = $state<Record<string, Record<string, string>>>({});
@@ -76,7 +77,7 @@
 		const isManualNavigation = searchParams.get('mode') === 'manual';
 		const isNavbarNavigation = searchParams.get('source') === 'navbar';
 		userInput = '';
-		
+
 		// Auto-clear terminal when navigating from navbar, but allow auto-navigation afterward
 		if (isNavbarNavigation) {
 			setTimeout(() => {
@@ -90,17 +91,17 @@
 			}, 50);
 			return; // Exit early to let the next effect cycle handle auto-navigation
 		}
-		
+
 		// Auto-navigate for routes with content (direct URL access or after navbar clear)
 		const shouldAutoNavigate = !isManualNavigation && !hasBeenCleared;
-		
+
 		// Handle blog post pages
 		const blogPostMatch = pathname.match(/^\/blog\/(.+)$/);
 		if (blogPostMatch && shouldAutoNavigate) {
 			const slug = blogPostMatch[1];
 			const autoCommand = `cd ~/blog/${slug} && cat content.txt`;
-			const hasAutoCommand = history.some(entry => entry.command === autoCommand);
-			
+			const hasAutoCommand = history.some((entry) => entry.command === autoCommand);
+
 			if (!hasAutoCommand) {
 				setTimeout(() => {
 					addToHistory(autoCommand, runCatDynamic('content.txt', `/blog/${slug}`), `/blog/${slug}`);
@@ -110,11 +111,16 @@
 		// Handle blog directory page
 		else if (pathname === '/blog' && shouldAutoNavigate) {
 			const autoCommand = `cd ~/blog && ls`;
-			const hasAutoCommand = history.some(entry => entry.command === autoCommand);
-			
+			const hasAutoCommand = history.some((entry) => entry.command === autoCommand);
+
 			if (!hasAutoCommand) {
 				setTimeout(() => {
-					addToHistory(autoCommand, runLsDynamic('/blog'), '/blog');
+					const lsResult = runLsDynamic('/blog');
+					if (typeof lsResult === 'string') {
+						addToHistory(autoCommand, lsResult, '/blog');
+					} else {
+						addToHistoryWithLsOutput(autoCommand, lsResult, '/blog');
+					}
 				}, 100);
 			}
 		}
@@ -122,8 +128,8 @@
 		else if (pathname.match(/^\/(about|contact|projects)$/) && shouldAutoNavigate) {
 			const routeName = pathname.replace('/', '');
 			const autoCommand = `cd ~/${routeName} && cat content.txt`;
-			const hasAutoCommand = history.some(entry => entry.command === autoCommand);
-			
+			const hasAutoCommand = history.some((entry) => entry.command === autoCommand);
+
 			if (!hasAutoCommand) {
 				setTimeout(() => {
 					addToHistory(autoCommand, runCatDynamic('content.txt', pathname), pathname);
@@ -137,10 +143,10 @@
 				showNeofetchIfAtRoot();
 			}, 100);
 		}
-		
+
 		// Note: We don't clean up the URL parameter to avoid timing issues
 		// It will be naturally cleared on the next navigation
-		
+
 		setTimeout(() => {
 			textarea?.focus();
 		}, 100);
@@ -196,14 +202,19 @@
 				addToHistory(command, runRm());
 				break;
 			case 'ls':
-				addToHistory(command, runLsDynamic(page.url.pathname));
+				const lsResult = runLsDynamic(page.url.pathname);
+				if (typeof lsResult === 'string') {
+					addToHistory(command, lsResult);
+				} else {
+					addToHistoryWithLsOutput(command, lsResult, page.url.pathname);
+				}
 				break;
 			case 'cat':
 				if (args.length >= 1) {
 					const filename = args[0];
 					const result = runCatDynamic(filename, page.url.pathname);
 					addToHistory(command, result);
-					
+
 					// If this is content.txt in a blog post directory, navigate to the URL
 					if (filename === 'content.txt' && page.url.pathname.startsWith('/blog/')) {
 						const slug = page.url.pathname.replace('/blog/', '');
@@ -222,13 +233,7 @@
 				clearTerminal();
 				return;
 			default:
-				// Try to execute as a file
-				const result = tryExecuteFile(command, page.url.pathname);
-				if (result !== null) {
-					addToHistory(command, result);
-				} else {
-					addToHistory(command, `Command not found: ${command}`);
-				}
+				addToHistory(command, `Command not found: ${command}`);
 				break;
 		}
 		clearInputAndFocus();
@@ -241,6 +246,16 @@
 			timestamp: new Date(),
 			pathname: customPathname || page.url.pathname,
 			isNeofetch: false
+		});
+	}
+
+	function addToHistoryWithLsOutput(command: string, lsOutput: { type: 'ls-output'; items: Array<{ name: string; isDirectory: boolean }> }, pathname: string) {
+		history.push({
+			command,
+			timestamp: new Date(),
+			pathname,
+			isNeofetch: false,
+			lsOutput
 		});
 	}
 
@@ -261,7 +276,7 @@
 	}
 
 	function showNeofetchIfAtRoot() {
-		if (page.url.pathname === '/' && !history.some(entry => entry.isNeofetch)) {
+		if (page.url.pathname === '/' && !history.some((entry) => entry.isNeofetch)) {
 			history.push(createNeofetchEntry());
 		}
 	}
@@ -269,10 +284,10 @@
 	function getCurrentDirectoryDynamic(path: string) {
 		if (!dynamicFileSystem['/']) return null;
 		if (path === '/') return dynamicFileSystem['/'];
-		
+
 		const parts = path.split('/').filter(Boolean);
 		let current = dynamicFileSystem['/'];
-		
+
 		for (const part of parts) {
 			if (current.type === 'directory' && current.children && current.children[part]) {
 				current = current.children[part];
@@ -283,44 +298,55 @@
 		return current;
 	}
 
-	function runLsDynamic(currentPath: string): string {
+	function runLsDynamic(currentPath: string): string | { type: 'ls-output'; items: Array<{ name: string; isDirectory: boolean }> } {
 		const currentDir = getCurrentDirectoryDynamic(currentPath);
-		
+
 		if (!currentDir || currentDir.type !== 'directory') {
 			return 'ls: cannot access: No such directory';
 		}
-		
+
 		if (!currentDir.children) {
-			return '';
+			return { type: 'ls-output', items: [] };
 		}
-		
-		const items = Object.entries(currentDir.children).map(([name, item]) => {
-			return name;
-		});
-		
-		return items.join('\n');
+
+		const items = Object.entries(currentDir.children).map(([name, item]) => ({
+			name,
+			isDirectory: item.type === 'directory'
+		}));
+
+		return { type: 'ls-output', items };
 	}
 
 	function runCatDynamic(filename: string, currentPath: string): string {
 		const currentDir = getCurrentDirectoryDynamic(currentPath);
-		
+
 		if (!currentDir || currentDir.type !== 'directory' || !currentDir.children) {
 			return `cat: ${filename}: No such file or directory`;
 		}
-		
+
 		const file = currentDir.children[filename];
 		if (!file) {
 			return `cat: ${filename}: No such file or directory`;
 		}
-		
+
 		if (file.type !== 'file') {
 			return `cat: ${filename}: Is a directory`;
 		}
-		
+
 		// Navigation will be handled separately for manual commands
-		
+
 		const content = dynamicContent[currentPath]?.[filename];
 		return content || `${filename}: File contents not available`;
+	}
+
+	function handleLsClick(itemName: string, isDirectory: boolean, fromPath: string) {
+		if (isDirectory) {
+			const newPath = fromPath === '/' ? `/${itemName}` : `${fromPath}/${itemName}`;
+			goto(`${newPath}?mode=manual`);
+		} else {
+			userInput = `cat ${itemName}`;
+			handleCommand();
+		}
 	}
 
 	function resolvePath(path: string, currentPath: string): string {
@@ -357,15 +383,15 @@
 	function runCdDynamic(path: string, currentPath: string): string | null {
 		const resolvedPath = resolvePath(path, currentPath);
 		const targetDir = getCurrentDirectoryDynamic(resolvedPath);
-		
+
 		if (!targetDir) {
 			return `cd: No such file or directory: ${path}`;
 		}
-		
+
 		if (targetDir.type !== 'directory') {
 			return `cd: Not a directory: ${path}`;
 		}
-		
+
 		// Add manual mode parameter to prevent auto-navigation
 		const urlWithParam = `${resolvedPath}?mode=manual`;
 		goto(urlWithParam);
@@ -386,7 +412,11 @@
 		{#if entry.isNeofetch}
 			<!-- Neofetch Display -->
 			<section class="animate-mask-reveal relative mb-2 inline-flex gap-4">
-				<img class="aspect-square h-[300px] bg-[#1D1D1D] object-contain" src={Avatar} alt="Avatar" />
+				<img
+					class="aspect-square h-[300px] bg-[#1D1D1D] object-contain"
+					src={Avatar}
+					alt="Avatar"
+				/>
 				<ul class="flex flex-1 flex-col justify-center gap-2">
 					{#each infoItems as item}
 						<li class="inline-flex items-center gap-2">
@@ -407,13 +437,15 @@
 			</section>
 		{:else}
 			<!-- Regular Command -->
-			<section class="relative flex flex-shrink-0 flex-grow-0 items-start justify-start self-stretch">
+			<section
+				class="relative flex flex-shrink-0 flex-grow-0 items-start justify-start self-stretch"
+			>
 				<div class="relative flex w-full items-center gap-2">
-					<span class="text-[#48ff05] flex-shrink-0">→</span>
-					<span class="text-[#afcfff] flex-shrink-0 max-w-[200px] truncate"
+					<span class="flex-shrink-0 text-[#48ff05]">→</span>
+					<span class="max-w-[200px] flex-shrink-0 truncate text-[#afcfff]"
 						>{entry.pathname === '/' ? '~' : entry.pathname.replace('/', '')}</span
 					>
-					<span class="text-white flex-1 min-w-0">{entry.command}</span>
+					<span class="min-w-0 flex-1 text-white">{entry.command}</span>
 				</div>
 			</section>
 			{#if entry.output}
@@ -421,6 +453,21 @@
 					class="relative flex flex-shrink-0 flex-grow-0 items-start justify-start self-stretch pl-6"
 				>
 					<pre class="whitespace-pre-wrap text-[#e4e4e4]">{entry.output}</pre>
+				</section>
+			{:else if entry.lsOutput}
+				<section
+					class="relative flex flex-shrink-0 flex-grow-0 items-start justify-start self-stretch pl-6"
+				>
+					<div class="flex flex-col gap-1">
+						{#each entry.lsOutput.items as item}
+							<span
+								class="text-[#e4e4e4] hover:text-[#48ff05] hover:underline cursor-pointer"
+								onclick={() => handleLsClick(item.name, item.isDirectory, entry.pathname)}
+							>
+								{item.name}{item.isDirectory ? '/' : ''}
+							</span>
+						{/each}
+					</div>
 				</section>
 			{/if}
 		{/if}
@@ -431,8 +478,8 @@
 		class="animate-fly-in relative flex flex-shrink-0 flex-grow-0 items-start justify-start self-stretch"
 	>
 		<div class="relative flex w-full items-center gap-2">
-			<span class="text-[#48ff05] flex-shrink-0">→</span>
-			<span class="text-[#afcfff] flex-shrink-0 max-w-[200px] truncate"
+			<span class="flex-shrink-0 text-[#48ff05]">→</span>
+			<span class="max-w-[200px] flex-shrink-0 truncate text-[#afcfff]"
 				>{page.url.pathname === '/' ? '~' : page.url.pathname.replace('/', '')}</span
 			>
 
@@ -440,7 +487,7 @@
 				bind:this={textarea}
 				bind:value={userInput}
 				rows="1"
-				class="flex-1 min-w-0 resize-none border-0 bg-transparent text-white outline-none hover:ring-0 hover:outline-none focus:ring-0 focus:outline-none"
+				class="min-w-0 flex-1 resize-none border-0 bg-transparent text-white outline-none hover:ring-0 hover:outline-none focus:ring-0 focus:outline-none"
 				onkeydown={handleKeyDown}
 				placeholder={`Type "help" for help`}
 			></textarea>
