@@ -2,6 +2,7 @@
 	import '../app.css';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Wallpaper from '$lib/assets/image-background.svg';
+	import Avatar from '$lib/assets/image-avatar.webp';
 
 	let { children } = $props();
 </script>
@@ -16,6 +17,12 @@
 		src={Wallpaper}
 		alt="Gradient aurora wallpaper"
 		class="fade-in absolute top-0 left-0 z-0 h-screen w-screen object-cover"
+	/>
+
+	<img
+		src={Avatar}
+		alt="Retro futuristic character with a Daft Punk helmet with a read heart painted on it."
+		class="absolute right-4 bottom-0 z-0 w-[180px]"
 	/>
 </main>
 
