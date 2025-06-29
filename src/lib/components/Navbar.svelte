@@ -17,7 +17,7 @@
 			hour12: true
 		})
 		.replace(/,/, '')
-		.replace(/,/, '  ');
+		.replace(/,/, ' ');
 
 	interface NavEntry {
 		label: string;
@@ -49,7 +49,7 @@
 </script>
 
 <nav class="z-10 flex items-center justify-between p-2 text-[13px]">
-	<div class="flex items-center gap-4">
+	<div class="flex items-center gap-2">
 		<a href="/">
 			<img src={AppleIcon} alt="Home" />
 		</a>
@@ -63,7 +63,7 @@
 			</a>
 		{/each}
 	</div>
-	<div class="flex items-center gap-4">
+	<div class="flex items-center gap-1">
 		<a href="https://bsky.app/profile/ozenui.com" target="_blank">
 			<img src={BlueskyIcon} alt="Bluesky" />
 		</a>
@@ -74,8 +74,15 @@
 			<img src={ContraIcon} alt="Contra" />
 		</a>
 
-		<p class="font-semibold whitespace-pre text-white">
+		<p class="ml-1 cursor-default font-semibold whitespace-pre text-white">
 			{formattedDate}
 		</p>
 	</div>
 </nav>
+
+<style>
+	a {
+		cursor: default;
+		padding: 4px;
+	}
+</style>

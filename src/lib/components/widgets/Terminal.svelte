@@ -1,9 +1,43 @@
 <script lang="ts">
 	import Avatar from '$lib/assets/image-avatar.webp';
-
 	let { children } = $props();
-
 	let textarea: HTMLTextAreaElement | undefined = $state(undefined);
+	let userInput = $state('');
+
+	const infoItems = [
+		{ label: '', value: 'ozenui' },
+		{ label: '', value: '-------' },
+		{ label: 'Name:', value: 'Enzo Romera' },
+		{ label: 'Nickname:', value: 'ozenui' },
+		{ label: 'Location:', value: 'France' },
+		{ label: 'Languages:', value: 'fr, en' },
+		{ label: 'Position:', value: 'Design engineer' },
+		{ label: 'Current company:', value: 'FullEnrich' },
+		{ label: 'Previou company:', value: 'Sesterce' },
+		{ label: 'Freelance seats:', value: '1/1' }
+	];
+
+	const colorBar = [
+		'#ff0000',
+		'#ff9000',
+		'#ffdd00',
+		'#94ff00',
+		'#26ff00',
+		'#00ffa1',
+		'#00fffa',
+		'#00bbff',
+		'#0050ff',
+		'#4c00ff',
+		'#8800ff',
+		'#cc00ff',
+		'#ff00d4',
+		'#ff006e',
+		'white',
+		'#e4e4e4',
+		'#b0b0b0',
+		'#434343',
+		'black'
+	];
 
 	$effect(() => {
 		if (textarea) {
@@ -16,6 +50,44 @@
 		textarea.style.height = 'auto';
 		textarea.style.height = textarea.scrollHeight + 'px';
 	}
+
+	function handleInput(event: Event) {
+		const target = event.target as HTMLTextAreaElement;
+		userInput = target.value;
+		autoGrow();
+	}
+
+	function handleKeyDown(event: KeyboardEvent) {
+		const target = event.target as HTMLTextAreaElement;
+
+		if (
+			(event.key === 'Backspace' || event.key === 'Delete') &&
+			(target.selectionStart === 0 || target.selectionEnd === 0)
+		) {
+			event.preventDefault();
+			return;
+		}
+
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			userInput = '';
+			autoGrow();
+		}
+
+		if (event.key === 'Home' || (event.ctrlKey && event.key === 'a')) {
+			event.preventDefault();
+			target.setSelectionRange(0, target.value.length);
+		}
+	}
+
+	function handlePaste(event: ClipboardEvent) {
+		const target = event.target as HTMLTextAreaElement;
+		if (target.selectionStart === 0 && target.selectionEnd === 0) {
+			setTimeout(() => {
+				target.setSelectionRange(0, 0);
+			}, 0);
+		}
+	}
 </script>
 
 <main
@@ -24,63 +96,20 @@
 	<section
 		class="animate-mask-reveal relative inline-flex items-stretch gap-5 self-stretch overflow-hidden"
 	>
-		<!-- Image -->
-		<div class="flex-shrink-0">
-			<img class="aspect-square h-[300px] bg-[#1D1D1D] object-contain" src={Avatar} alt="Avatar" />
-		</div>
-
-		<!-- Info list -->
+		<img class="aspect-square h-[300px] bg-[#1D1D1D] object-contain" src={Avatar} alt="Avatar" />
 		<ul class="flex flex-1 flex-col justify-center gap-2">
-			<li class="inline-flex items-center gap-2">
-				<div class="font-normal text-[#ffefaf]">ozenui</div>
-			</li>
-
-			<li class="inline-flex items-center gap-2">
-				<div class="font-normal text-[#ffefaf]">-------</div>
-			</li>
-
-			<li class="inline-flex items-center gap-2">
-				<div class="font-normal text-[#ffefaf]">Name:</div>
-				<div class="font-normal text-[#f7afff]">Enzo Romera</div>
-			</li>
-
-			<li class="inline-flex items-center gap-2">
-				<div class="font-normal text-[#ffefaf]">Nickname:</div>
-				<div class="font-normal text-[#f7afff]">ozenui</div>
-			</li>
-
-			<li class="inline-flex items-center gap-2">
-				<div class="font-normal text-[#ffefaf]">Location:</div>
-				<div class="font-normal text-[#f7afff]">France</div>
-			</li>
-
-			<li class="inline-flex items-center gap-2">
-				<div class="font-normal text-[#ffefaf]">Languages:</div>
-				<div class="font-normal text-[#f7afff]">fr, en</div>
-			</li>
-
-			<li class="inline-flex items-center gap-2">
-				<div class="font-normal text-[#ffefaf]">Currently:</div>
-				<div class="font-normal text-[#f7afff]">Design engineer @ FullEnrich</div>
-			</li>
-
-			<li class="inline-flex items-center gap-2">
-				<div class="font-normal text-[#ffefaf]">Previously:</div>
-				<div class="font-normal text-[#f7afff]">Design engineer @ Sesterce</div>
-			</li>
-
-			<li class="inline-flex items-center gap-2">
-				<div class="font-normal text-[#ffefaf]">Side project:</div>
-				<div class="font-normal text-[#f7afff]">Blurr (more soon)</div>
-			</li>
-
-			<li class="inline-flex items-center gap-2">
-				<div class="font-normal text-[#ffefaf]">Freelance seats:</div>
-				<div class="font-normal text-[#f7afff]">1/1</div>
-			</li>
-
+			{#each infoItems as item}
+				<li class="inline-flex items-center gap-2">
+					{#if item.label}
+						<div class="font-normal text-[#ffefaf]">{item.label}</div>
+						<div class="font-normal text-[#f7afff]">{item.value}</div>
+					{:else}
+						<div class="font-normal text-[#ffefaf]">{item.value}</div>
+					{/if}
+				</li>
+			{/each}
 			<li class="inline-flex w-[400px] flex-wrap items-center pt-4">
-				{#each ['#ff0000', '#ff9000', '#ffdd00', '#94ff00', '#26ff00', '#00ffa1', '#00fffa', '#00bbff', '#0050ff', '#4c00ff', '#8800ff', '#cc00ff', '#ff00d4', '#ff006e', 'white', '#e4e4e4', '#b0b0b0', '#434343', 'black'] as color}
+				{#each colorBar as color}
 					<div class="relative h-2 flex-1" style="background-color: {color}"></div>
 				{/each}
 			</li>
@@ -88,17 +117,27 @@
 	</section>
 
 	<section
-		class="animate-fly-in relative flex flex-shrink-0 flex-grow-0 items-start justify-start gap-2 self-stretch"
+		class="animate-fly-in relative flex flex-shrink-0 flex-grow-0 items-start justify-start self-stretch"
 	>
-		<p class="flex-shrink-0 flex-grow-0 text-[#48ff05]">→</p>
-		<p class="flex-shrink-0 flex-grow-0 text-[#afcfff]">ozenui</p>
-		<textarea
-			bind:this={textarea}
-			rows="1"
-			class="w-full resize-none border-0 bg-transparent outline-none hover:ring-0 hover:outline-none focus:ring-0 focus:outline-none"
-			oninput={autoGrow}
-			placeholder={`Type "help" for help`}
-		></textarea>
+		<div class="relative w-full">
+			<div class="pointer-events-none absolute top-0 left-0 z-10 flex items-start space-x-2">
+				<span class="text-[#48ff05]">→</span>
+				<span class="text-[#afcfff]">ozenui</span>
+				<span class="text-white">$</span>
+			</div>
+
+			<textarea
+				bind:this={textarea}
+				bind:value={userInput}
+				rows="1"
+				class="w-full resize-none border-0 bg-transparent text-white outline-none hover:ring-0 hover:outline-none focus:ring-0 focus:outline-none"
+				oninput={handleInput}
+				onkeydown={handleKeyDown}
+				onpaste={handlePaste}
+				placeholder={`Type "help" for help`}
+				style="padding-left: 88px;"
+			></textarea>
+		</div>
 	</section>
 
 	{@render children()}
@@ -113,12 +152,10 @@
 			clip-path: inset(0 0 0 0);
 		}
 	}
-
 	.animate-mask-reveal {
 		clip-path: inset(0 0 100% 0);
 		animation: maskReveal 0.3s ease-out 0s forwards;
 	}
-
 	@keyframes flyIn {
 		0% {
 			transform: translateY(-400px);
@@ -129,7 +166,6 @@
 			opacity: 1;
 		}
 	}
-
 	.animate-fly-in {
 		animation: flyIn 0.3s ease-out 0s both;
 	}
