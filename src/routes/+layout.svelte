@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import Navbar from '$lib/components/Navbar.svelte';
-	import Terminal from '$lib/components/widgets/Terminal.svelte';
+	import Terminal from '$lib/components/terminal/Terminal.svelte';
 
 	let { children } = $props();
 </script>
