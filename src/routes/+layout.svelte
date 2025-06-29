@@ -18,18 +18,6 @@
 			</Terminal>
 		</div>
 	</content>
-
-	<img
-		src={Wallpaper}
-		alt="Gradient aurora wallpaper"
-		class="fade-in absolute top-0 left-0 z-0 h-screen w-screen object-cover"
-	/>
-
-	<img
-		src={Avatar}
-		alt="Retro futuristic character with a Daft Punk helmet with a read heart painted on it."
-		class="absolute right-4 bottom-0 z-0 w-[180px]"
-	/>
 </main>
 
 <style>
