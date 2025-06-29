@@ -41,5 +41,8 @@
 	},
 	"dependencies": {
 		"dayjs": "^1.11.13"
+	},
+	"optionalDependencies": {
+		"@rollup/rollup-linux-x64-gnu": "^4.0.0"
 	}
 }
