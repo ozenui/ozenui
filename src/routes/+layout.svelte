@@ -3,18 +3,16 @@
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Wallpaper from '$lib/assets/image-background.svg';
 	import Avatar from '$lib/assets/image-avatar.webp';
-	import Terminal from '$lib/components/widgets/Terminal.svelte';
 
 	let { children } = $props();
 </script>
 
-<main class="relative h-screen w-screen bg-black p-2 text-neutral-50">
+<main class="relative h-screen w-screen overflow-hidden bg-black p-2 text-neutral-50">
 	<content class="relative z-10 flex h-full w-full flex-col">
 		<Navbar />
-		{@render children()}
 
-		<div class="h-full w-full grid-cols-2">
-			<Terminal></Terminal>
+		<div class="flex h-full w-full gap-2 overflow-hidden">
+			{@render children()}
 		</div>
 	</content>
 

@@ -57,7 +57,7 @@
 		{#each navEntries as entry}
 			<a
 				href={entry.href}
-				class={`font-medium text-neutral-300 ${page.url.pathname === entry.href ? 'font-bold text-white' : ''}`}
+				class={`font-medium text-neutral-400 ${page.url.pathname === entry.href ? 'font-bold text-white' : ''}`}
 			>
 				{entry.label}
 			</a>
