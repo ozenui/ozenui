@@ -31,8 +31,8 @@
 		{ label: 'Location:', value: 'France' },
 		{ label: 'Languages:', value: 'fr, en' },
 		{ label: 'Position:', value: 'Design engineer' },
-		{ label: 'Current company:', value: 'FullEnrich' },
-		{ label: 'Previou company:', value: 'Sesterce' },
+		{ label: 'Currently at:', value: 'FullEnrich' },
+		{ label: 'Previously at:', value: 'Sesterce' },
 		{ label: 'Freelance seats:', value: '1/1' }
 	];
 
@@ -249,7 +249,11 @@
 		});
 	}
 
-	function addToHistoryWithLsOutput(command: string, lsOutput: { type: 'ls-output'; items: Array<{ name: string; isDirectory: boolean }> }, pathname: string) {
+	function addToHistoryWithLsOutput(
+		command: string,
+		lsOutput: { type: 'ls-output'; items: Array<{ name: string; isDirectory: boolean }> },
+		pathname: string
+	) {
 		history.push({
 			command,
 			timestamp: new Date(),
@@ -298,7 +302,9 @@
 		return current;
 	}
 
-	function runLsDynamic(currentPath: string): string | { type: 'ls-output'; items: Array<{ name: string; isDirectory: boolean }> } {
+	function runLsDynamic(
+		currentPath: string
+	): string | { type: 'ls-output'; items: Array<{ name: string; isDirectory: boolean }> } {
 		const currentDir = getCurrentDirectoryDynamic(currentPath);
 
 		if (!currentDir || currentDir.type !== 'directory') {
@@ -461,7 +467,7 @@
 					<div class="flex flex-col gap-1">
 						{#each entry.lsOutput.items as item}
 							<span
-								class="text-[#e4e4e4] hover:text-[#48ff05] hover:underline cursor-pointer"
+								class="cursor-pointer text-[#e4e4e4] hover:text-[#48ff05] hover:underline"
 								onclick={() => handleLsClick(item.name, item.isDirectory, entry.pathname)}
 							>
 								{item.name}{item.isDirectory ? '/' : ''}
