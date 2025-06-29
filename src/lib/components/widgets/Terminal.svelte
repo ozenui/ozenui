@@ -10,6 +10,9 @@
 
 	$effect(() => {
 		mounted = true;
+		if (textarea) {
+			textarea.focus();
+		}
 	});
 
 	function autoGrow() {
@@ -92,23 +95,22 @@
 				</li>
 			</ul>
 		</section>
+
+		<section
+			class="relative flex flex-shrink-0 flex-grow-0 items-start justify-start gap-2 self-stretch"
+		>
+			<p class="flex-shrink-0 flex-grow-0 text-[#48ff05]">→</p>
+			<p class="flex-shrink-0 flex-grow-0 text-[#afcfff]">ozenui</p>
+			<textarea
+				bind:this={textarea}
+				rows="1"
+				class="w-full resize-none border-0 bg-transparent outline-none hover:ring-0 hover:outline-none focus:ring-0 focus:outline-none"
+				oninput={autoGrow}
+			></textarea>
+		</section>
+
+		{@render children()}
 	{/if}
-
-	<section
-		class="relative flex flex-shrink-0 flex-grow-0 items-start justify-start gap-2 self-stretch"
-	>
-		<p class="flex-shrink-0 flex-grow-0 text-[#48ff05]">→</p>
-		<p class="flex-shrink-0 flex-grow-0 text-[#afcfff]">ozenui</p>
-		<textarea
-			bind:this={textarea}
-			rows="1"
-			class="w-full resize-none border-0 bg-transparent outline-none hover:ring-0 hover:outline-none focus:ring-0 focus:outline-none"
-			oninput={autoGrow}
-			autofocus
-		></textarea>
-	</section>
-
-	{@render children()}
 </main>
 
 <style>
