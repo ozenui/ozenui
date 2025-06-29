@@ -77,37 +77,61 @@
 		const isNavbarNavigation = searchParams.get('source') === 'navbar';
 		userInput = '';
 		
-		// Auto-clear terminal when navigating from navbar
+		// Auto-clear terminal when navigating from navbar, but allow auto-navigation afterward
 		if (isNavbarNavigation) {
 			setTimeout(() => {
 				clearTerminal();
+				// Reset the cleared flag to allow auto-navigation for navbar navigation
+				hasBeenCleared = false;
 				// Clean up the navbar parameter
 				const url = new URL(page.url);
 				url.searchParams.delete('source');
 				goto(url.pathname + url.search, { replaceState: true });
 			}, 50);
+			return; // Exit early to let the next effect cycle handle auto-navigation
 		}
 		
-		// Check if this is a blog post URL and auto-navigate (only for direct URL access, not manual navigation)
-		const blogMatch = pathname.match(/^\/blog\/(.+)$/);
-		if (blogMatch && !isManualNavigation && !hasBeenCleared && !isNavbarNavigation) {
-			const slug = blogMatch[1];
-			// Only auto-navigate if we don't already have ANY navigation commands to this path
-			const hasNavigationInHistory = history.some(entry => 
-				entry.pathname === `/blog/${slug}` && (
-					entry.command === 'cat content.txt' || 
-					entry.command === `cd ${slug}` ||
-					entry.command.includes(slug)
-				)
-			);
+		// Auto-navigate for routes with content (direct URL access or after navbar clear)
+		const shouldAutoNavigate = !isManualNavigation && !hasBeenCleared;
+		
+		// Handle blog post pages
+		const blogPostMatch = pathname.match(/^\/blog\/(.+)$/);
+		if (blogPostMatch && shouldAutoNavigate) {
+			const slug = blogPostMatch[1];
+			const autoCommand = `cd ~/blog/${slug} && cat content.txt`;
+			const hasAutoCommand = history.some(entry => entry.command === autoCommand);
 			
-			if (!hasNavigationInHistory) {
-				// Auto-navigate to blog post directory and show the content
+			if (!hasAutoCommand) {
 				setTimeout(() => {
-					addToHistory(`cd ~/blog/${slug} && cat content.txt`, runCatDynamic('content.txt', `/blog/${slug}`), `/blog/${slug}`);
+					addToHistory(autoCommand, runCatDynamic('content.txt', `/blog/${slug}`), `/blog/${slug}`);
 				}, 100);
 			}
-		} else if (pathname === '/' && !isNavbarNavigation) {
+		}
+		// Handle blog directory page
+		else if (pathname === '/blog' && shouldAutoNavigate) {
+			const autoCommand = `cd ~/blog && ls`;
+			const hasAutoCommand = history.some(entry => entry.command === autoCommand);
+			
+			if (!hasAutoCommand) {
+				setTimeout(() => {
+					addToHistory(autoCommand, runLsDynamic('/blog'), '/blog');
+				}, 100);
+			}
+		}
+		// Handle single-level routes (about, contact, projects)
+		else if (pathname.match(/^\/(about|contact|projects)$/) && shouldAutoNavigate) {
+			const routeName = pathname.replace('/', '');
+			const autoCommand = `cd ~/${routeName} && cat content.txt`;
+			const hasAutoCommand = history.some(entry => entry.command === autoCommand);
+			
+			if (!hasAutoCommand) {
+				setTimeout(() => {
+					addToHistory(autoCommand, runCatDynamic('content.txt', pathname), pathname);
+				}, 100);
+			}
+		}
+		// Handle home page
+		else if (pathname === '/' && !isNavbarNavigation) {
 			// Show neofetch if at root (but not if coming from navbar since we cleared)
 			setTimeout(() => {
 				showNeofetchIfAtRoot();
