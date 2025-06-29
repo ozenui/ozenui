@@ -144,9 +144,6 @@
 			}, 100);
 		}
 
-		// Note: We don't clean up the URL parameter to avoid timing issues
-		// It will be naturally cleared on the next navigation
-
 		setTimeout(() => {
 			textarea?.focus();
 		}, 100);
@@ -272,7 +269,7 @@
 	function createNeofetchEntry() {
 		return {
 			command: 'neofetch',
-			output: undefined, // We'll render this specially
+			output: undefined,
 			timestamp: new Date(),
 			pathname: '/',
 			isNeofetch: true
