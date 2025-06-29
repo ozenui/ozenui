@@ -70,7 +70,7 @@
 		<a href="https://github.com/ozenui/ozenui" target="_blank">
 			<img src={GithubIcon} alt="GitHub" />
 		</a>
-		<a href="https://contra.com/enzoromera" target="_blank">
+		<a href="https://contra.com/ozenuidesign" target="_blank">
 			<img src={ContraIcon} alt="Contra" />
 		</a>
 
