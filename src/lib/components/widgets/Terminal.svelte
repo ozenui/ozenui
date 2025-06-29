@@ -1,7 +1,5 @@
 <script lang="ts">
 	import Avatar from '$lib/assets/image-avatar.webp';
-	import { quadInOut, quadOut } from 'svelte/easing';
-	import { fly } from 'svelte/transition';
 
 	let { children } = $props();
 
