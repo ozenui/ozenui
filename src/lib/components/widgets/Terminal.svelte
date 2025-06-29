@@ -19,7 +19,7 @@
 </script>
 
 <main
-	class="flex h-full w-full flex-col items-start justify-start gap-5 overflow-hidden rounded-[10px] border border-white/10 bg-white/5 p-4 text-left font-mono text-[13px] transition-all duration-300 ease-out"
+	class="flex h-full w-full cursor-text flex-col items-start justify-start gap-5 overflow-hidden rounded-[10px] border border-white/10 bg-white/5 p-4 text-left font-mono text-[13px] transition-all duration-300 ease-out"
 >
 	<section
 		class="animate-mask-reveal relative inline-flex items-stretch gap-5 self-stretch overflow-hidden"
@@ -97,6 +97,7 @@
 			rows="1"
 			class="w-full resize-none border-0 bg-transparent outline-none hover:ring-0 hover:outline-none focus:ring-0 focus:outline-none"
 			oninput={autoGrow}
+			placeholder={`Type "help" for help`}
 		></textarea>
 	</section>
 
