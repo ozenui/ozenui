@@ -1,12 +1,13 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
-	import Avatar from '$lib/assets/image-avatar.webp';
 	import { runHelp, runRm } from './commands.js';
 	import { discoverContent } from './content-discovery.js';
-	import { onMount } from 'svelte';
+	import Avatar from '$lib/assets/image-avatar.webp';
 
 	let { children } = $props();
+
 	let textarea: HTMLTextAreaElement | undefined = $state(undefined);
 	let userInput = $state('');
 	let history = $state<
