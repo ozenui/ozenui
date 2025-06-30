@@ -346,6 +346,11 @@
 	function handleLsClick(itemName: string, isDirectory: boolean, fromPath: string) {
 		if (isDirectory) {
 			const newPath = fromPath === '/' ? `/${itemName}` : `${fromPath}/${itemName}`;
+
+			if (newPath.includes('blog')) {
+				goto(`${newPath}`);
+				return;
+			}
 			goto(`${newPath}?mode=manual`);
 		} else {
 			userInput = `cat ${itemName}`;
