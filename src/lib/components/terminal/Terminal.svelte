@@ -473,7 +473,7 @@
 								class="cursor-pointer text-[#e4e4e4] hover:text-[#48ff05] hover:underline"
 								onclick={() => handleLsClick(item.name, item.isDirectory, entry.pathname)}
 							>
-								{item.name}{item.isDirectory ? '/' : ''}
+								↳ {item.name}{item.isDirectory ? '/' : ''}
 							</span>
 						{/each}
 					</div>
