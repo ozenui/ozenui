@@ -15,6 +15,7 @@
 		if (event.key === 'Enter') {
 			event.preventDefault();
 			commands.run(value.trim(), { fromPath: page.url.pathname });
+			value = '';
 			autoGrow();
 		}
 	}
