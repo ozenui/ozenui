@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import { commands } from '$lib/components/terminal/commands';
+	import { history } from '$lib/components/terminal/commands';
 	import Navbar from '$lib/components/navbar/navbar.svelte';
 	import * as Terminal from '$lib/components/terminal';
 
@@ -11,11 +11,15 @@
 	<content class="relative z-10 flex h-full w-full flex-col gap-2">
 		<Navbar />
 		<Terminal.Root>
-			{#each commands.history as entry}
-				<Terminal.Row {entry}></Terminal.Row>
-			{/each}
+			<ul>
+				{#each $history as entry}
+					<Terminal.Row {entry} />
+				{/each}
+			</ul>
+
 			{@render children()}
-			<Terminal.Input></Terminal.Input>
+
+			<Terminal.Input />
 		</Terminal.Root>
 	</content>
 </main>

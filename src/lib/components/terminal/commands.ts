@@ -1,13 +1,25 @@
+import { writable } from 'svelte/store';
+
 export interface HistoryEntry {
 	path: string;
-	command: string;
-	output: string;
+	value: string;
+	type: 'input' | 'output';
 }
 
-export let history: HistoryEntry[] = [];
+export const history = writable<HistoryEntry[]>([]);
 
 function logToHistory(path: string, command: string, output: string): string {
-	history.push({ path, command, output });
+	path = path.replace('/', '');
+
+	if (path === '') {
+		path = '~';
+	}
+
+	history.update((currentHistory) => [
+		...currentHistory,
+		{ path, value: command, type: 'input' },
+		{ path, value: output, type: 'output' }
+	]);
 	return output;
 }
 
@@ -31,10 +43,9 @@ function runRm(path: string, command: string): string {
 	return logToHistory(path, command, output);
 }
 
-function runClear(path: string, command: string): string {
-	history = [];
-	const output = 'Cleared history';
-	return logToHistory(path, command, output);
+function runClear(): string {
+	history.set([]);
+	return '';
 }
 
 const commandMap: Record<string, (path: string, command: string) => string> = {
@@ -48,11 +59,9 @@ const commandMap: Record<string, (path: string, command: string) => string> = {
 function run(command: string, options: { fromPath: string }): string {
 	const [cmd] = command.trim().split(/\s+/);
 	const exec = commandMap[cmd];
-
 	if (!exec) {
 		return logToHistory(options.fromPath, command, `Unknown command: ${cmd}`);
 	}
-
 	return exec(options.fromPath, command);
 }
 
