@@ -56,7 +56,7 @@
 
 		{#each navEntries as entry}
 			<a
-				href={`${entry.href}?source=navbar`}
+				href={entry.href}
 				class={`font-medium text-neutral-400 ${page.url.pathname === entry.href ? 'font-bold text-white' : ''}`}
 			>
 				{entry.label}

@@ -5,6 +5,12 @@
 	let inputElement: HTMLTextAreaElement | undefined = $state(undefined);
 	let value = $state('');
 
+	$effect(() => {
+		if (inputElement && page.url.pathname) {
+			inputElement?.focus();
+		}
+	});
+
 	function handleKeyDown(event: KeyboardEvent) {
 		if (event.key === 'Enter') {
 			event.preventDefault();
