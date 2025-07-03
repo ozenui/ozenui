@@ -12,6 +12,11 @@
 			<span class="min-w-0 flex-1 text-white"> {entry.value} </span>
 		</div>
 	{:else}
-		<pre class="whitespace-pre-wrap text-[#e4e4e4]"> {entry.value} </pre>
+		<pre class="text-[#e4e4e4]">
+			{@html entry.value
+				.replace(/\t/g, '')
+				.replace(/\s*\n\s*/g, '')
+				.replace(/\s{2,}/g, ' ')}
+		</pre>
 	{/if}
 </li>

@@ -50,7 +50,7 @@
 
 <nav class="z-10 flex items-center justify-between p-2 text-[13px]">
 	<div class="flex items-center gap-2">
-		<a href="/?source=navbar">
+		<a href="/">
 			<img src={AppleIcon} alt="Home" />
 		</a>
 
