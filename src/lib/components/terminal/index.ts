@@ -1,4 +1,4 @@
-import Terminal from './terminal.svelte';
+import Terminal from './Terminal.svelte';
 import Row from './terminal-row.svelte';
 import Input from './terminal-input.svelte';
 import Hero from './terminal-hero.svelte';
