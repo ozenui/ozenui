@@ -7,7 +7,7 @@
 		if (page.url.searchParams.get('mode') === 'manual') {
 			commands.run('clear', { fromPath: page.url.pathname });
 		}
-		const command = "'cd ~/about && cat content.txt'";
+		const command = 'cd ~/about && cat content.txt';
 		const output = Content;
 		logToHistory(page.url.pathname, command, output);
 	});

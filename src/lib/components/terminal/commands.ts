@@ -33,6 +33,11 @@ function runHelp(path: string, command: string): void {
 	return;
 }
 
+function runNeofetch(path: string, command: string): void {
+	const output = 'neofetch';
+	logToHistory(path, command, output);
+}
+
 function runLs(path: string, command: string): void {
 	const output = 'file1.txt  file2.txt  folder/';
 	logToHistory(path, command, output);
@@ -57,6 +62,7 @@ function runClear(): void {
 
 const commandMap: Record<string, (path: string, command: string) => string | void> = {
 	help: runHelp,
+	neofetch: runNeofetch,
 	ls: runLs,
 	cd: runCd,
 	rm: runRm,

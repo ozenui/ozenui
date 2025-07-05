@@ -27,9 +27,7 @@
 	}
 </script>
 
-<section
-	class="animate-fly-in relative flex flex-shrink-0 flex-grow-0 items-start justify-start self-stretch"
->
+<section class=" relative flex flex-shrink-0 flex-grow-0 items-start justify-start self-stretch">
 	<div class="relative flex w-full items-center gap-2">
 		<span class="flex-shrink-0 text-[#48ff05]">→</span>
 		<span class="max-w-[200px] flex-shrink-0 truncate text-[#afcfff]"

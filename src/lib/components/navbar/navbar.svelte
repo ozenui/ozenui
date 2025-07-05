@@ -27,11 +27,6 @@
 
 	const navEntries: NavEntry[] = [
 		{
-			label: 'ozenui',
-			href: '/',
-			params: '?mode=manual'
-		},
-		{
 			label: 'About',
 			href: '/about',
 			params: '?mode=manual'
@@ -56,7 +51,7 @@
 
 <nav class="z-10 flex items-center justify-between p-2 text-[13px]">
 	<div class="flex items-center gap-2">
-		<a href="/">
+		<a href="/?mode=manual">
 			<img src={AppleIcon} alt="Home" />
 		</a>
 
