@@ -6,9 +6,9 @@
 	$effect(() => {
 		if (page.url.searchParams.get('mode') === 'manual') {
 			commands.run('clear', { fromPath: page.url.pathname });
+			const command = 'cd ~/contact && cat content.txt';
+			const output = Content;
+			logToHistory(page.url.pathname, command, output);
 		}
-		const command = 'cd ~/contact && cat content.txt';
-		const output = Content;
-		logToHistory(page.url.pathname, command, output);
 	});
 </script>

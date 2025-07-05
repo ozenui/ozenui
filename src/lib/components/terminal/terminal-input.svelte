@@ -7,7 +7,9 @@
 
 	$effect(() => {
 		if (inputElement && page.url.pathname) {
-			inputElement?.focus();
+			setTimeout(() => {
+				inputElement?.focus();
+			}, 100);
 		}
 	});
 

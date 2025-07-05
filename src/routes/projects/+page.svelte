@@ -5,8 +5,8 @@
 	$effect(() => {
 		if (page.url.searchParams.get('mode') === 'manual') {
 			commands.run('clear', { fromPath: page.url.pathname });
+			const command = 'cd ~/projects && ls';
+			commands.run(command, { fromPath: page.url.pathname });
 		}
-		const command = 'cd ~/projects && ls';
-		commands.run(command, { fromPath: page.url.pathname });
 	});
 </script>

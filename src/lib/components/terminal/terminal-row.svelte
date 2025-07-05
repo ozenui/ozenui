@@ -27,7 +27,7 @@
 			{@render commandLine()}
 		{:else}
 			<pre class="text-[#e4e4e4]">
-				{@html entry.value.replace(/\s+/g, ' ').trim()}
+				{@html entry.value}
 			</pre>
 		{/if}
 	</li>
