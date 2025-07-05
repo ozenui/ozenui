@@ -76,8 +76,11 @@ function runLs(path: string): string {
 		'\n' +
 		Object.keys(currentNode.children)
 			.map((key) => {
-				const name = currentNode.children[key].type === 'directory' ? `${key}/` : key;
-				return `  ${name}`;
+				const isDir = currentNode.children[key].type === 'directory';
+				const name = isDir ? `${key}/` : key;
+				const fullPath = path === '/' ? `/${key}` : `${path}`;
+				const href = `${fullPath}?mode=manual`;
+				return `  <a href="${href}">${name}</a>`;
 			})
 			.join('\n') +
 		'\n'
