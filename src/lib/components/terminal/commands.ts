@@ -151,7 +151,7 @@ function runCat(path: string, command: string): string {
 }
 
 function runRm(): string {
-	return 'Deleted item (not really)';
+	return '😨';
 }
 
 function runClear(): string {
