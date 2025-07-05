@@ -21,7 +21,10 @@ getContentMaps().then((maps) => {
 function logHistory(path: string, command: string, output: string | undefined): void {
 	const displayPath = path === '/' ? '~' : path.substring(1);
 
-	history.update((currentHistory) => [...currentHistory, { path: displayPath, value: command, type: 'input' }]);
+	history.update((currentHistory) => [
+		...currentHistory,
+		{ path: displayPath, value: command, type: 'input' }
+	]);
 
 	if (output) {
 		history.update((currentHistory) => [
@@ -41,7 +44,8 @@ Available commands:
   cat       - Display file contents
   neofetch  - Show system information
   rm        - Remove files
-  clear     - Clear terminal`;
+  clear     - Clear terminal
+  `;
 }
 
 function runNeofetch(): string {
@@ -75,7 +79,8 @@ function runLs(path: string): string {
 				const name = currentNode.children[key].type === 'directory' ? `${key}/` : key;
 				return `  ${name}`;
 			})
-			.join('\n')
+			.join('\n') +
+		'\n'
 	);
 }
 
@@ -136,7 +141,7 @@ function runCat(path: string, command: string): string {
 	const fileName = fullPath.substring(fullPath.lastIndexOf('/') + 1);
 
 	if (contentMap[dirName] && contentMap[dirName][fileName]) {
-		return contentMap[dirName][fileName];
+		return contentMap[dirName][fileName].trim();
 	} else {
 		return `cat: ${filePath}: No such file or directory`;
 	}
@@ -169,8 +174,8 @@ async function run(command: string, options: { fromPath: string }): Promise<void
 	}
 
 	let currentPath = options.fromPath;
-	let output = '';
 	let pathHasChanged = false;
+	const allOutputs: string[] = []; // Array to collect all outputs
 
 	const commandsToRun = fullCommand
 		.split('&&')
@@ -179,6 +184,7 @@ async function run(command: string, options: { fromPath: string }): Promise<void
 
 	for (const cmdStr of commandsToRun) {
 		const [cmdName] = cmdStr.split(/\s+/);
+		let currentCommandOutput = ''; // Output for the current command in the chain
 
 		if (cmdName === 'cd') {
 			const { newPath, error } = executeCd(currentPath, cmdStr, fileSystemMap);
@@ -186,27 +192,32 @@ async function run(command: string, options: { fromPath: string }): Promise<void
 				currentPath = newPath;
 				pathHasChanged = true;
 			} else {
-				output = error || 'An unknown error occurred with cd.';
-				// On failure, log and stop.
-				logHistory(options.fromPath, fullCommand, output);
-				// if path changed before failure, update url
+				currentCommandOutput = error || 'An unknown error occurred with cd.';
+				allOutputs.push(currentCommandOutput); // Add error to outputs
+				logHistory(options.fromPath, fullCommand, allOutputs.join('\n')); // Log all outputs up to this point
 				if (pathHasChanged) await goto(currentPath);
-				return;
+				return; // Stop execution on cd failure
 			}
 		} else {
 			const exec = commandMap[cmdName];
 			if (exec) {
-				output = exec(currentPath, cmdStr);
+				currentCommandOutput = exec(currentPath, cmdStr);
 			} else {
-				output = `Unknown command: ${cmdName}`;
-				logHistory(options.fromPath, fullCommand, output);
+				currentCommandOutput = `Unknown command: ${cmdName}`;
+				allOutputs.push(currentCommandOutput); // Add error to outputs
+				logHistory(options.fromPath, fullCommand, allOutputs.join('\n')); // Log all outputs up to this point
 				if (pathHasChanged) await goto(currentPath);
-				return;
+				return; // Stop execution on unknown command
 			}
+		}
+		// Only add non-empty output to the collection
+		if (currentCommandOutput) {
+			allOutputs.push(currentCommandOutput);
 		}
 	}
 
-	logHistory(options.fromPath, fullCommand, output);
+	// Log the full command and all collected outputs
+	logHistory(options.fromPath, fullCommand, allOutputs.join('\n'));
 
 	if (pathHasChanged) {
 		await goto(currentPath);

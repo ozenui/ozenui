@@ -117,6 +117,9 @@
 	body {
 		@apply bg-background text-foreground;
 	}
+	a {
+		@apply cursor-pointer text-[#48ff05] hover:underline;
+	}
 }
 
 @keyframes maskReveal {

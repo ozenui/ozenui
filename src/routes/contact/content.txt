@@ -1,8 +1,3 @@
-<h1>CONTACT</1>
-<br />
-<p>====================</p>
-<li>Bluesky: <a class="cursor-pointer text-[#e4e4e4] hover:text-[#48ff05] hover:underline" href="https://bsky.app/profile/ozenui.com">@ozenui.com</a></li>
-<li>GitHub: <a class="cursor-pointer text-[#e4e4e4] hover:text-[#48ff05] hover:underline" href="https://github.com/ozenui">@ozenui</a></li>
-<li>Contra: <a class="cursor-pointer text-[#e4e4e4] hover:text-[#48ff05] hover:underline" href="https://contra.com/ozenuidesign">@ozenuidesign</a></li>
-
-
+<br /><li>Bluesky: <a href="https://bsky.app/profile/ozenui.com">@ozenui.com</a></li>
+<li>GitHub: <a href="https://github.com/ozenui">@ozenui</a></li>
+<li>Contra: <a href="https://contra.com/ozenuidesign">@ozenuidesign</a></li>

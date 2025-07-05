@@ -26,9 +26,10 @@
 		{#if entry.type === 'input'}
 			{@render commandLine()}
 		{:else}
-			<pre class="text-[#e4e4e4]">
+			<div class="whitespace-pre-wrap text-[#e4e4e4]">
 				{@html entry.value}
-			</pre>
+				<br />
+			</div>
 		{/if}
 	</li>
 {/if}
