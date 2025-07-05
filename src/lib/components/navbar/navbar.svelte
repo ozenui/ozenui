@@ -22,41 +22,42 @@
 	interface NavEntry {
 		label: string;
 		href: string;
+		params: string;
 	}
 
 	const navEntries: NavEntry[] = [
 		{
-			label: 'ozenui',
-			href: '/'
-		},
-		{
 			label: 'About',
-			href: '/about'
+			href: '/about',
+			params: '?mode=manual'
 		},
 		{
 			label: 'Projects',
-			href: '/projects'
+			href: '/projects',
+			params: '?mode=manual'
 		},
 		{
 			label: 'Blog',
-			href: '/blog'
+			href: '/blog',
+			params: '?mode=manual'
 		},
 		{
 			label: 'Contact',
-			href: '/contact'
+			href: '/contact',
+			params: '?mode=manual'
 		}
 	];
 </script>
 
 <nav class="z-10 flex items-center justify-between p-2 text-[13px]">
 	<div class="flex items-center gap-2">
-		<a href="/?source=navbar">
+		<a href="/?mode=manual">
 			<img src={AppleIcon} alt="Home" />
 		</a>
 
 		{#each navEntries as entry}
 			<a
-				href={`${entry.href}?source=navbar`}
+				href={entry.href + entry.params}
 				class={`font-medium text-neutral-400 ${page.url.pathname === entry.href ? 'font-bold text-white' : ''}`}
 			>
 				{entry.label}
