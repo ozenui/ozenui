@@ -22,28 +22,34 @@
 	interface NavEntry {
 		label: string;
 		href: string;
+		params: string;
 	}
 
 	const navEntries: NavEntry[] = [
 		{
 			label: 'ozenui',
-			href: '/'
+			href: '/',
+			params: '?mode=manual'
 		},
 		{
 			label: 'About',
-			href: '/about'
+			href: '/about',
+			params: '?mode=manual'
 		},
 		{
 			label: 'Projects',
-			href: '/projects'
+			href: '/projects',
+			params: '?mode=manual'
 		},
 		{
 			label: 'Blog',
-			href: '/blog'
+			href: '/blog',
+			params: '?mode=manual'
 		},
 		{
 			label: 'Contact',
-			href: '/contact'
+			href: '/contact',
+			params: '?mode=manual'
 		}
 	];
 </script>
@@ -56,7 +62,7 @@
 
 		{#each navEntries as entry}
 			<a
-				href={entry.href}
+				href={entry.href + entry.params}
 				class={`font-medium text-neutral-400 ${page.url.pathname === entry.href ? 'font-bold text-white' : ''}`}
 			>
 				{entry.label}

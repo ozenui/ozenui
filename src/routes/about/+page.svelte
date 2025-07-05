@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { commands, logToHistory } from '$lib/components/terminal/commands';
-	import Content from './index.html?raw';
+	import Content from './content.txt?raw';
 
 	$effect(() => {
 		if (page.url.searchParams.get('mode') === 'manual') {
