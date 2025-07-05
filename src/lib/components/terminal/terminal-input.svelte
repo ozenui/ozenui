@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import { commands } from './commands';
 
+	let { terminalRoot } = $props<{ terminalRoot?: any }>();
 	let inputElement: HTMLTextAreaElement | undefined = $state(undefined);
 	let value = $state('');
 
@@ -19,7 +20,16 @@
 			commands.run(value.trim(), { fromPath: page.url.pathname });
 			value = '';
 			autoGrow();
+			scrollToBottom();
 		}
+	}
+
+	function scrollToBottom() {
+		setTimeout(() => {
+			if (terminalRoot && terminalRoot.scrollToBottom) {
+				terminalRoot.scrollToBottom();
+			}
+		}, 50);
 	}
 
 	function autoGrow() {
