@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { history, type HistoryEntry } from './commands';
+	import { type HistoryEntry } from './commands';
 	import TerminalHero from './terminal-hero.svelte';
 
 	let { entry }: { entry: HistoryEntry } = $props();
@@ -14,11 +14,7 @@
 {/snippet}
 
 {#if entry.value === 'neofetch'}
-	{#if entry.type === 'input'}
-		{#if $history.length > 2 && entry !== $history[0]}
-			{@render commandLine()}
-		{/if}
-	{:else}
+	{#if entry.type === 'output'}
 		<TerminalHero />
 	{/if}
 {:else}
