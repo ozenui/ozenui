@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type HistoryEntry } from './commands';
+	import { type HistoryEntry } from './types';
 	import TerminalHero from './terminal-hero.svelte';
 
 	let { entry }: { entry: HistoryEntry } = $props();

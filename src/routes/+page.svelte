@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { commands } from '$lib/components/terminal/commands';
+	import { terminalActions } from '$lib/components/terminal/stores/terminal';
 
 	let manualModeCommandsRun = false;
 
 	$effect(() => {
 		if (page.url.searchParams.get('mode') === 'manual' && !manualModeCommandsRun) {
-			commands.run('clear', { fromPath: page.url.pathname });
+			terminalActions.executeCommand('clear', page.url.pathname);
 			manualModeCommandsRun = true;
 		}
-		commands.run('neofetch', { fromPath: page.url.pathname });
+		terminalActions.executeCommand('neofetch', page.url.pathname);
 	});
 </script>

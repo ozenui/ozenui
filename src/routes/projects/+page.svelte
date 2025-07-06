@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { commands } from '$lib/components/terminal/commands';
+	import { terminalActions } from '$lib/components/terminal/stores/terminal';
 
 	let manualModeCommandsRun = false;
 
 	$effect(() => {
 		if (page.url.searchParams.get('mode') === 'manual' && !manualModeCommandsRun) {
-			commands.run('clear', { fromPath: page.url.pathname });
+			terminalActions.executeCommand('clear', page.url.pathname);
 			const command = 'cd ~/projects && ls';
-			commands.run(command, { fromPath: page.url.pathname });
+			terminalActions.executeCommand(command, page.url.pathname);
 			manualModeCommandsRun = true;
 		}
 	});

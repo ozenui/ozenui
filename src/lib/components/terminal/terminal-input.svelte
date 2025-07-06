@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { commands } from './commands';
+	import { terminalActions } from './stores/terminal';
 
 	let { terminalRoot } = $props<{ terminalRoot?: any }>();
 	let inputElement: HTMLTextAreaElement | undefined = $state(undefined);
@@ -17,7 +17,7 @@
 	function handleKeyDown(event: KeyboardEvent) {
 		if (event.key === 'Enter') {
 			event.preventDefault();
-			commands.run(value.trim(), { fromPath: page.url.pathname });
+			terminalActions.executeCommand(value.trim(), page.url.pathname);
 			value = '';
 			autoGrow();
 			scrollToBottom();

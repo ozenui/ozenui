@@ -1,11 +1,16 @@
 <script lang="ts">
 	import '../app.css';
-	import { history } from '$lib/components/terminal/commands';
+	import { terminalState, terminalActions } from '$lib/components/terminal/stores/terminal';
 	import Navbar from '$lib/components/navbar/navbar.svelte';
 	import * as Terminal from '$lib/components/terminal';
 
 	let { children } = $props();
 	let terminalRoot: any = $state(undefined);
+
+	// Initialize terminal on mount
+	$effect(() => {
+		terminalActions.initialize();
+	});
 </script>
 
 <main class="relative h-screen w-screen overflow-hidden bg-black p-2 text-neutral-50">
@@ -13,7 +18,7 @@
 		<Navbar />
 		<Terminal.Root bind:this={terminalRoot}>
 			<ul>
-				{#each $history as entry}
+				{#each $terminalState.history as entry}
 					<Terminal.Row {entry} />
 				{/each}
 			</ul>
