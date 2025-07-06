@@ -1,3 +1,0 @@
-<br /><p>Hi there 👋</p>
-<p>I'm Enzo, a french musician, designer and developer.</p>
-<p>I currently work at <a href="https://fullenrich.com">FullEnrich</a> as a design engineer, and previously led design operations at <a href="https://sesterce.com">Sesterce</a>.</p>

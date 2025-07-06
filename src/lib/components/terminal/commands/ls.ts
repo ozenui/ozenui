@@ -16,12 +16,12 @@ export class ListCommand extends BaseCommand {
 					const isDir = entry.type === 'directory';
 					const name = isDir ? `${entry.name}/` : entry.name;
 					const fullPath = targetPath === '/' ? `/${entry.name}` : `${targetPath}/${entry.name}`;
-					const href = isDir ? `${fullPath}?mode=manual` : fullPath;
-					return `  <a href="${href}">${name}</a>`;
+					const href = `${isDir ? fullPath : fullPath.replace('content.md', '')}?mode=manual`;
+					return `↪ <a href="${href}">${name}</a>`;
 				})
 				.join('\n');
 
-			return this.createSuccessResult('\n' + output + '\n');
+			return this.createSuccessResult(output);
 		} catch (error) {
 			return this.createErrorResult(
 				'LS_ERROR',
