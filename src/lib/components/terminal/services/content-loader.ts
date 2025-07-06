@@ -5,13 +5,13 @@ export class ContentLoader {
 	private contentMap: Record<string, Record<string, string>> = {};
 
 	async initialize(): Promise<void> {
-		const modules = import.meta.glob('/src/routes/**/content.txt', {
+		const modules = import.meta.glob('/src/routes/**/content.md', {
 			query: '?raw',
 			import: 'default'
 		});
 
 		for (const [path, importFn] of Object.entries(modules)) {
-			const match = path.match(/\/src\/routes\/(.+)\/content\.txt$/);
+			const match = path.match(/\/src\/routes\/(.+)\/content\.md$/);
 			if (!match) continue;
 
 			const routePath = match[1];
@@ -22,7 +22,7 @@ export class ContentLoader {
 				if (!this.contentMap[`/${directory}`]) {
 					this.contentMap[`/${directory}`] = {};
 				}
-				this.contentMap[`/${directory}`]['content.txt'] = (await importFn()) as string;
+				this.contentMap[`/${directory}`]['content.md'] = (await importFn()) as string;
 			} else if (segments.length >= 2) {
 				const directory = segments[0];
 				const slug = segments[1];
@@ -36,9 +36,9 @@ export class ContentLoader {
 					if (!this.contentMap[subPath]) {
 						this.contentMap[subPath] = {};
 					}
-					this.contentMap[subPath]['content.txt'] = (await importFn()) as string;
+					this.contentMap[subPath]['content.md'] = (await importFn()) as string;
 				} else {
-					const filename = `${slug}.txt`;
+					const filename = `${slug}.md`;
 					this.contentMap[`/${directory}`][filename] = (await importFn()) as string;
 				}
 			}

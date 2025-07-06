@@ -1,8 +1,27 @@
 <script lang="ts">
 	import { type HistoryEntry } from './types';
 	import TerminalHero from './terminal-hero.svelte';
+	import { marked } from 'marked';
 
 	let { entry }: { entry: HistoryEntry } = $props();
+
+	function isMarkdownContent(value: string): boolean {
+		return /#{1,6}\s|\[.*\]\(.*\)|`.*`|\*\*.*\*\*|_.*_|^\*|^-|^>/.test(value);
+	}
+
+	function processContent(value: string): string {
+		if (isMarkdownContent(value)) {
+			const html = marked.parse(value, {
+				breaks: true,
+				gfm: true
+			}) as string;
+			return html
+				.replace(/<p>/g, '')
+				.replace(/<\/p>/g, '<br>')
+				.replace(/<br><br>/g, '<br>');
+		}
+		return value;
+	}
 </script>
 
 {#snippet commandLine()}
@@ -22,9 +41,8 @@
 		{#if entry.type === 'input'}
 			{@render commandLine()}
 		{:else}
-			<div class="whitespace-pre-wrap text-[#e4e4e4]">
-				{@html entry.value}
-				<br />
+			<div class="prose prose-invert prose-sm max-w-none whitespace-pre-wrap text-[#e4e4e4]">
+				{@html processContent(entry.value)}
 			</div>
 		{/if}
 	</li>

@@ -32,13 +32,13 @@ export class FileSystemService {
 	}
 
 	private async buildFileSystem(): Promise<void> {
-		const modules = import.meta.glob('/src/routes/**/content.txt', {
+		const modules = import.meta.glob('/src/routes/**/content.md', {
 			query: '?raw',
 			import: 'default'
 		});
 
 		for (const [path] of Object.entries(modules)) {
-			const match = path.match(/\/src\/routes\/(.+)\/content\.txt$/);
+			const match = path.match(/\/src\/routes\/(.+)\/content\.md$/);
 			if (!match) continue;
 
 			const routePath = match[1];
@@ -47,7 +47,7 @@ export class FileSystemService {
 			if (segments.length === 1) {
 				const directory = segments[0];
 				this.ensureDirectory(`/${directory}`);
-				this.createFile(`/${directory}/content.txt`, '');
+				this.createFile(`/${directory}/content.md`, '');
 			} else if (segments.length >= 2) {
 				const directory = segments[0];
 				const slug = segments[1];
@@ -56,9 +56,9 @@ export class FileSystemService {
 
 				if (directory === 'blog') {
 					this.ensureDirectory(`/${directory}/${slug}`);
-					this.createFile(`/${directory}/${slug}/content.txt`, '');
+					this.createFile(`/${directory}/${slug}/content.md`, '');
 				} else {
-					const filename = `${slug}.txt`;
+					const filename = `${slug}.md`;
 					this.createFile(`/${directory}/${filename}`, '');
 				}
 			}

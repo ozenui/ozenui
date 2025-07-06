@@ -7,7 +7,7 @@
 	$effect(() => {
 		if (page.url.searchParams.get('mode') === 'manual' && !manualModeCommandsRun) {
 			terminalActions.executeCommand('clear', page.url.pathname);
-			terminalActions.executeCommand('cd ~/about && cat content.txt', page.url.pathname);
+			terminalActions.executeCommand('cd ~/about && cat content.md', page.url.pathname);
 			manualModeCommandsRun = true;
 		}
 	});
