@@ -43,7 +43,7 @@
 	<div class="relative flex w-full items-center gap-2">
 		<span class="flex-shrink-0 text-[#48ff05]">→</span>
 		<span class="max-w-[200px] flex-shrink-0 truncate text-[#afcfff]"
-			>{page.url.pathname === '/' ? '~' : page.url.pathname.replace('/', '')}</span
+			>{page.url.pathname === '/' ? '~' : page.url.pathname.split('/').pop()}</span
 		>
 
 		<textarea

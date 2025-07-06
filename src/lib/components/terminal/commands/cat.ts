@@ -12,8 +12,8 @@ export class CatCommand extends BaseCommand {
 		}
 
 		const fileName = args[0];
-		const filePath = context.currentPath === '/' ? `/${fileName}` : `${context.currentPath}/${fileName}`;
-		
+		const filePath = context.fileSystemService.joinPath(context.currentPath, fileName);
+
 		const fileContent = context.fileSystemService.getFile(filePath);
 
 		if (!fileContent) {

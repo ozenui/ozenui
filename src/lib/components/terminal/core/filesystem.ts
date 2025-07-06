@@ -37,31 +37,24 @@ export class FileSystemService {
 			import: 'default'
 		});
 
-		for (const [path] of Object.entries(modules)) {
+		for (const [path, resolver] of Object.entries(modules)) {
+			const moduleContent = await (resolver as any)();
+			const content = moduleContent;
+
 			const match = path.match(/\/src\/routes\/(.+)\/content\.md$/);
 			if (!match) continue;
 
 			const routePath = match[1];
 			const segments = routePath.split('/');
 
-			if (segments.length === 1) {
-				const directory = segments[0];
-				this.ensureDirectory(`/${directory}`);
-				this.createFile(`/${directory}/content.md`, '');
-			} else if (segments.length >= 2) {
-				const directory = segments[0];
-				const slug = segments[1];
-
-				this.ensureDirectory(`/${directory}`);
-
-				if (directory === 'blog') {
-					this.ensureDirectory(`/${directory}/${slug}`);
-					this.createFile(`/${directory}/${slug}/content.md`, '');
-				} else {
-					const filename = `${slug}.md`;
-					this.createFile(`/${directory}/${filename}`, '');
-				}
+			// Handle arbitrary nesting of directories
+			let currentPath = '/';
+			for (let i = 0; i < segments.length; i++) {
+				const segment = segments[i];
+				currentPath = this.joinPath(currentPath, segment);
+				this.ensureDirectory(currentPath);
 			}
+			this.createFile(`${currentPath}/content.md`, content);
 		}
 	}
 
@@ -177,7 +170,7 @@ export class FileSystemService {
 			};
 		}
 
-		return this.contentLoader.getFileContent(path);
+		return null;
 	}
 
 	private getNode(path: string): FileSystemNode | null {

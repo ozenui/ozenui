@@ -133,7 +133,8 @@ class TerminalService {
 	}
 
 	private formatPath(path: string): string {
-		return path === '/' ? '~' : path.substring(1);
+		const segments = path.split('/').filter(Boolean);
+		return segments.length > 0 ? segments[segments.length - 1] : '~';
 	}
 
 	private addToHistory(entry: HistoryEntry): void {

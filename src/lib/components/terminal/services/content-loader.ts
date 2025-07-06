@@ -11,37 +11,24 @@ export class ContentLoader {
 		});
 
 		for (const [path, importFn] of Object.entries(modules)) {
-			const match = path.match(/\/src\/routes\/(.+)\/content\.md$/);
+			const match = path.match(new RegExp("\\/src\\/routes\\/(.+)\\/content\\.md$"));
 			if (!match) continue;
 
 			const routePath = match[1];
 			const segments = routePath.split('/');
 
-			if (segments.length === 1) {
-				const directory = segments[0];
-				if (!this.contentMap[`/${directory}`]) {
-					this.contentMap[`/${directory}`] = {};
-				}
-				this.contentMap[`/${directory}`]['content.md'] = (await importFn()) as string;
-			} else if (segments.length >= 2) {
-				const directory = segments[0];
-				const slug = segments[1];
+			let currentPath = '/';
+			let currentMap = this.contentMap;
 
-				if (!this.contentMap[`/${directory}`]) {
-					this.contentMap[`/${directory}`] = {};
+			for (let i = 0; i < segments.length; i++) {
+				const segment = segments[i];
+				currentPath = `${currentPath === '/' ? '' : currentPath}/${segment}`;
+				if (!currentMap[currentPath]) {
+					currentMap[currentPath] = {};
 				}
-
-				if (directory === 'blog') {
-					const subPath = `/${directory}/${slug}`;
-					if (!this.contentMap[subPath]) {
-						this.contentMap[subPath] = {};
-					}
-					this.contentMap[subPath]['content.md'] = (await importFn()) as string;
-				} else {
-					const filename = `${slug}.md`;
-					this.contentMap[`/${directory}`][filename] = (await importFn()) as string;
-				}
+				currentMap = currentMap[currentPath];
 			}
+			currentMap['content.md'] = (await importFn()) as string;
 		}
 	}
 
