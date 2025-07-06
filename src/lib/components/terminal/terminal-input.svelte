@@ -10,7 +10,7 @@
 		if (inputElement && page.url.pathname) {
 			setTimeout(() => {
 				inputElement?.focus();
-			}, 100);
+			}, 1);
 		}
 	});
 
