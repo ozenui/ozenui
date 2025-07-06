@@ -122,6 +122,10 @@
 	}
 }
 
+.prose img {
+	max-width: 720px;
+}
+
 @keyframes maskReveal {
 	0% {
 		clip-path: inset(0 0 100% 0);
