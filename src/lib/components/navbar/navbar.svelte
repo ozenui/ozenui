@@ -49,7 +49,7 @@
 	];
 </script>
 
-<nav class="z-10 flex items-center justify-between p-2 text-[13px]">
+<nav class="z-10 flex items-center justify-between p-2 text-[13px] max-sm:flex-col">
 	<div class="flex items-center gap-2">
 		<a href="/?mode=manual">
 			<img src={AppleIcon} alt="Home" />

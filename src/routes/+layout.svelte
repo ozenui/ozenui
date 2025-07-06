@@ -17,7 +17,7 @@
 	<content class="relative z-10 flex h-full w-full flex-col gap-2">
 		<Navbar />
 		<Terminal.Root bind:this={terminalRoot}>
-			<ul>
+			<ul class="w-full">
 				{#each $terminalState.history as entry}
 					<Terminal.Row {entry} />
 				{/each}

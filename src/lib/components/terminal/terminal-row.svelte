@@ -25,7 +25,7 @@
 </script>
 
 {#snippet commandLine()}
-	<div class="relative flex w-full items-center gap-2">
+	<div class="relative flex w-full items-start gap-2">
 		<span class="flex-shrink-0 text-[#48ff05]">→</span>
 		<span class="max-w-[200px] flex-shrink-0 truncate text-[#afcfff]"> {entry.path} </span>
 		<span class="min-w-0 flex-1 text-white"> {entry.value} </span>

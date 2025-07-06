@@ -37,9 +37,13 @@
 	];
 </script>
 
-<section class="animate-mask-reveal relative mb-2 inline-flex gap-4">
-	<img class="aspect-square h-[300px] bg-[#1D1D1D] object-contain" src={Avatar} alt="Avatar" />
-	<ul class="flex flex-1 flex-col justify-center gap-2">
+<section class="animate-mask-reveal relative mb-2 w-full gap-4 md:inline-flex">
+	<img
+		class="aspect-square w-full max-w-[300px] bg-[#1D1D1D] object-contain"
+		src={Avatar}
+		alt="Avatar"
+	/>
+	<ul class="flex flex-1 flex-col justify-center gap-2 max-md:pt-2">
 		{#each infoItems as item}
 			<li class="inline-flex items-center gap-2">
 				{#if item.label}
@@ -50,9 +54,9 @@
 				{/if}
 			</li>
 		{/each}
-		<li class="inline-flex w-[400px] flex-wrap items-center pt-4">
+		<li class="inline-flex w-full max-w-[400px] flex-wrap items-center pt-4">
 			{#each colorBar as color}
-				<div class="relative h-2 flex-1" style="background-color: {color}"></div>
+				<div class="relative h-2 w-full flex-1" style="background-color: {color}"></div>
 			{/each}
 		</li>
 	</ul>
