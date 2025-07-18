@@ -8,7 +8,7 @@
 		{ label: 'Nickname:', value: 'ozenui' },
 		{ label: 'Location:', value: 'France' },
 		{ label: 'Languages:', value: 'fr, en' },
-		{ label: 'Position:', value: 'Design engineer' },
+		{ label: 'Position:', value: 'Product, design and engineering' },
 		{ label: 'Currently at:', value: 'FullEnrich' },
 		{ label: 'Previously at:', value: 'Sesterce' },
 		{ label: 'Freelance seats:', value: '1/1' }
