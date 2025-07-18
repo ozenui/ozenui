@@ -7,8 +7,7 @@
 	$effect(() => {
 		if (page.url.searchParams.get('mode') === 'manual' && !manualModeCommandsRun) {
 			terminalActions.executeCommand('clear', page.url.pathname);
-			const command = `cd ~${page.url.pathname} && cat content.md`;
-			terminalActions.executeCommand(command, page.url.pathname);
+			terminalActions.executeCommand('cd ~/gallery && cat content.md', page.url.pathname);
 			manualModeCommandsRun = true;
 		}
 	});

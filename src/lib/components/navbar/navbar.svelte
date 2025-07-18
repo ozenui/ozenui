@@ -32,6 +32,11 @@
 			params: '?mode=manual'
 		},
 		{
+			label: 'Gallery',
+			href: '/gallery',
+			params: '?mode=manual'
+		},
+		{
 			label: 'Projects',
 			href: '/projects',
 			params: '?mode=manual'
