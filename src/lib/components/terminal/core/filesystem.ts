@@ -198,5 +198,4 @@ export class FileSystemService {
 	getFileSystem(): FileSystem {
 		return this.fileSystem;
 	}
-
 }
