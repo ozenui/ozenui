@@ -42,7 +42,7 @@
 			{@render commandLine()}
 		{:else}
 			<div
-				class="prose prose-invert prose-sm max-w-none whitespace-pre-wrap text-[#e4e4e4] [img]:h-auto [img]:w-full [img]:max-w-[100px]"
+				class="prose prose-invert prose-sm max-w-none whitespace-pre-wrap text-[#e4e4e4] [img]:h-auto [img]:w-full"
 			>
 				{@html processContent(entry.value)}
 			</div>

@@ -154,3 +154,8 @@
 .animate-fly-in {
 	animation: flyIn 0.3s ease-out 0s both;
 }
+
+.prose img {
+	width: 100% !important;
+	max-width: 1080px !important;
+}
